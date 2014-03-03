@@ -3,24 +3,44 @@
   (:require [clj-http.client :as client])
   (:require [clojure.string]))
 
+
+(defn get-body
+  "Get the body of a url"
+  [url]
+  ((client/get url) :body))
+
 ;;;; Example to download an image
 ;; (download-file "http://timenewsfeed.files.wordpress.com/2013/12/doge.jpg")
-(defn download-file [url]
-  (let [conn-image (client/get url {:as :byte-array})
-        filename   (last (clojure.string/split url #"/"))]
+(defn download-file [url filename]
+  (let [conn-image (client/get url {:as :byte-array})]
     (with-open [w (clojure.java.io/output-stream filename)]
       (.write w (:body conn-image)))))
 
-(defn download-free-track
-  "Download a free track from soundcloud. Still in testing due to unknown client_id"
-  [url target-uri]
-  (let [html ((client/get url) :body)
-        matches (re-seq #"data-sc-track=\"(\d+)\"" html)
+(defn get-track-id
+  "Get the track id, given an html body"
+  [body]
+  (let [matches (re-seq #"data-sc-track=\"(\d+)\"" body)
         track-id (second (first matches))]
-    (spit target-uri (client/get
-                      (str "https://api.soundcloud.com/tracks/"
-                           track-id
-                           "/download?client_id=b45b1aa10f1ac2941910a7f0d10f8e28")))))
+    track-id))
 
+(defn get-track-title
+  "Takes a body of a given url and extracts the track name.
+   Returns the name of the track as a string."
+  [body]
+  (second (first (re-seq #"<title>(.+) by" body))))
 
-(download-free-track "https://soundcloud.com/theclerkscologne/play-skatalites-garden-of-love" "clerks.wav")
+(defn download-free-track
+  "Download a free track from soundcloud. Still in testing due to unknown client_id" 
+  [url target-uri]
+  (let [body (get-body url)
+        track-id (get-track-id body)]
+    (download-file
+     (str "https://api.soundcloud.com/tracks/"
+          track-id
+          "/download?client_id=b45b1aa10f1ac2941910a7f0d10f8e28")
+     target-uri)))
+
+;; Construct download link:
+;; https://api.soundcloud.com/tracks/DATA-SC-TRACK/download?client_id=32HASH
+;; https://api.soundcloud.com/tracks/69992039/download?client_id=b45b1aa10f1ac2941910a7f0d10f8e28
+
