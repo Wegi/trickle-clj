@@ -15,7 +15,6 @@
    Returns the name of the track as a string."
   [body]
   (second (first (re-seq #"<title>(.+) by" body))))
-(get-track-name body)
 
 ;; Construct download link:
 ;; https://api.soundcloud.com/tracks/DATA-SC-TRACK/download?client_id=32HASH
