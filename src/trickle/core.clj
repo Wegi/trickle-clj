@@ -10,14 +10,12 @@
     (with-open [w (clojure.java.io/output-stream filename)]
       (.write w (:body conn-image)))))
 
-(defn get-track-name
+(defn get-track-title
   "Takes a body of a given url and extracts the track name.
    Returns the name of the track as a string."
   [body]
-  (clojure.string/replace
-   (clojure.string/replace
-    (first (re-seq #"<title>.+by" body)) #"<title>" "") #" by" ""))
-
+  (second (first (re-seq #"<title>(.+) by" body))))
+(get-track-name body)
 
 ;; Construct download link:
 ;; https://api.soundcloud.com/tracks/DATA-SC-TRACK/download?client_id=32HASH
