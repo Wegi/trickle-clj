@@ -1,23 +1,23 @@
 (ns trickle.core
   (:gen-class)
-  (:require [clj-http.client :as client])
-  (:require [clojure.string]))
-
+  (:require [clj-http.client :as client]))
 
 (defn get-body
-  "Get the body of a url"
+  "Get the body of a URL."
   [url]
   ((client/get url) :body))
 
 ;;;; Example to download an image
 ;; (download-file "http://timenewsfeed.files.wordpress.com/2013/12/doge.jpg")
-(defn download-file [url filename]
+(defn download-file
+  "Download a file from spec. URL into filename."
+  [url filename]
   (let [conn-image (client/get url {:as :byte-array})]
     (with-open [w (clojure.java.io/output-stream filename)]
       (.write w (:body conn-image)))))
 
 (defn get-track-id
-  "Get the track id, given an html body"
+  "Get the track id, given an html body from soundcloud."
   [body]
   (let [matches (re-seq #"data-sc-track=\"(\d+)\"" body)
         track-id (second (first matches))]
@@ -30,7 +30,7 @@
   (second (first (re-seq #"<title>(.+) by" body))))
 
 (defn download-free-track
-  "Download a free track from soundcloud. Still in testing due to unknown client_id" 
+  "Download a free track from soundcloud. Assuming that the client_id does not change at all." 
   [url target-uri]
   (let [body (get-body url)
         track-id (get-track-id body)]
@@ -39,8 +39,4 @@
           track-id
           "/download?client_id=b45b1aa10f1ac2941910a7f0d10f8e28")
      target-uri)))
-
-;; Construct download link:
-;; https://api.soundcloud.com/tracks/DATA-SC-TRACK/download?client_id=32HASH
-;; https://api.soundcloud.com/tracks/69992039/download?client_id=b45b1aa10f1ac2941910a7f0d10f8e28
 
