@@ -7,8 +7,6 @@
   [url]
   ((client/get url) :body))
 
-;;;; Example to download an image
-;; (download-file "http://timenewsfeed.files.wordpress.com/2013/12/doge.jpg")
 (defn download-file
   "Download a file from spec. URL into filename."
   [url filename]
