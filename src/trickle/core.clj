@@ -2,6 +2,9 @@
   (:gen-class)
   (:require [clj-http.client :as client]))
 
+(def client-id "b45b1aa10f1ac2941910a7f0d10f8e28")
+
+
 (defn get-body
   "Get the body of a URL."
   [url]
@@ -36,6 +39,6 @@
     (download-file
      (str "https://api.soundcloud.com/tracks/"
           track-id
-          "/download?client_id=b45b1aa10f1ac2941910a7f0d10f8e28")
+          "/download?client_id=" client-id)
      (str song-name ".wav"))))
 
