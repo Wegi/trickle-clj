@@ -31,12 +31,13 @@
 
 (defn download-free-track
   "Download a free track from soundcloud. Assuming that the client_id does not change at all." 
-  [url target-uri]
+  [url]
   (let [body (get-body url)
-        track-id (get-track-id body)]
+        track-id (get-track-id body)
+        song-name (get-track-title body)]
     (download-file
      (str "https://api.soundcloud.com/tracks/"
           track-id
           "/download?client_id=b45b1aa10f1ac2941910a7f0d10f8e28")
-     target-uri)))
+     (str song-name ".wav"))))
 
