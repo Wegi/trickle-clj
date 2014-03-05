@@ -16,3 +16,13 @@
   => "69992039"
   (core/get-track-id testbody2)
   => "26772050")
+
+(fact "Test the extraction of needed Metadata"
+  (core/extract-dl-info "https://soundcloud.com/revealed-recordings/dash-berlin-carita-la-nina-dragonfly-download")
+  => {:uploader "revealed-recordings",
+      :track-title "dash-berlin-carita-la-nina-dragonfly-download",
+      :private-token ""}
+  (core/extract-dl-info "https://soundcloud.com/wegi-productions/1337-mlgpro/dh3289ez-a3")
+  => {:uploader "wegi-productions"
+      :track-title "1337-mlgpro"
+      :private-token "dh3289ez-a3"})

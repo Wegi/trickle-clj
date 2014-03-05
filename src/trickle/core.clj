@@ -30,6 +30,15 @@
   [body]
   (second (first (re-seq #"<title>(.+) by" body))))
 
+(defn extract-dl-info
+  "Extracts data needed for the download of a stream."
+  [url]
+  (let [pattern #".+soundcloud.com/([\w\d-]+)/([\w\d-]+)/?(.*)?$"
+        matches (rest (re-find pattern url))]
+    {:uploader      (first matches)
+     :track-title   (second matches)
+     :private-token (last matches)}))
+
 (defn download-free-track
   "Download a free track from soundcloud. Assuming that the client_id does not change at all." 
   [url]
@@ -41,4 +50,9 @@
           track-id
           "/download?client_id=" client-id)
      (str song-name ".wav"))))
+
+(defn download-stream
+  "Download a Stream from Soundcloud. Ask the API for the Stream URL."
+  ;;TODO
+  )
 
