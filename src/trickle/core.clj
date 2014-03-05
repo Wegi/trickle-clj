@@ -53,6 +53,9 @@
 
 (defn download-stream
   "Download a Stream from Soundcloud. Ask the API for the Stream URL."
+  ;;Get a Stream URL
+  ;;Make API Request for Stream URL without redirect
+  ;;Grab resource
   ;;TODO
   )
 
