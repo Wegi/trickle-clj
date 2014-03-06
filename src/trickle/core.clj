@@ -13,15 +13,14 @@
 (defn get-xml
   "Grabs the Track Info in XML form from the API."
   [url]
-  ((client/get (str api-url "/resolve?client_id=" client-id "&url=" url)) :body))
+  ((client/get (str api-url "/resolve?client_id=" client-id
+                    "&url=" url)) :body))
 
-(defn create-info-map
-  "Create an Info Hashmap from the XML String."
+(defn get-stream-url
+  "Get the Stream-URL from the XML String."
   [xmlstr]
   (let [stream-url (re-find #"<stream-url>(.*)</stream-url>" xmlstr)]
-    {:stream-url (second stream-url)}))
-
-(create-info-map (get-xml "https://soundcloud.com/revealed-recordings/dash-berlin-carita-la-nina-dragonfly-download"))
+    (second stream-url)))
 
 (defn download-file
   "Download a file from spec. URL into filename."
@@ -46,7 +45,7 @@
 (defn extract-dl-info
   "Extracts data needed for the download of a stream from the permalink-URL."
   [url]
-  (let [pattern #".+soundcloud.com/([\w\d-]+)/([\w\d-]+)/?(.*)?$"
+  (let [pattern #".+soundcloud.com/([\w\d-]+)/([\w\d-]+)/?(.*)?$" ;TODO raute
         matches (rest (re-find pattern url))]
     {:uploader      (first matches)
      :track-title   (second matches)
@@ -57,17 +56,20 @@
   [url]
   (let [body (get-body url)
         track-id (get-track-id body)
-        song-name (get-track-title body)]
+        song-name (get-track-title body)
+        private-token ((extract-dl-info url) :private-token)]
     (download-file
      (str "https://api.soundcloud.com/tracks/"
           track-id
-          "/download?client_id=" client-id)
+          "/download?client_id=" client-id "&secret_token=" private-token)
      (str song-name ".wav"))))
 
 (defn download-stream
   [url]
-  (let [track-xml (create-info-map (get-xml url))
-        stream-url (track-xml :stream-url)
-        file-link (str stream-url "?client_id=" client-id)
-        info (extract-dl-info url)]
-    (download-file file-link (str (info :track-title) ".mp3"))))
+  (let [stream-url (get-stream-url (get-xml url))
+        info (extract-dl-info url)
+        private-token (info :private-token)
+        sec-symbol (if (some #{\?} stream-url) "&" "?")
+        file-link (str stream-url sec-symbol "client_id=" client-id)
+        title (info :track-title)]
+    (download-file file-link (str title ".mp3"))))

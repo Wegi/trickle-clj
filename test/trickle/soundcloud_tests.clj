@@ -7,8 +7,8 @@
 (def testxml (core/get-xml "https://soundcloud.com/revealed-recordings/dash-berlin-carita-la-nina-dragonfly-download"))
 
 (fact "Test the XML-Info generation"
-  (core/create-info-map testxml)
-  => {:stream-url "http://api.soundcloud.com/tracks/135737624/stream"})
+  (core/get-stream-url testxml)
+  => "http://api.soundcloud.com/tracks/135737624/stream")
 
 (fact "Test the song-Name exraction"
   (core/get-track-title testbody)
