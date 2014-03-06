@@ -1,36 +1,29 @@
-# trickle
+# trickle - Reverse Engineering Services you know
 
-FIXME: description
+After having succeeded all exams this semester, we wanted to start a small OpenSource project with the smart programming language Clojure.
 
-## Installation
-
-Download from http://example.com/FIXME.
 
 ## Usage
 
-FIXME: explanation
+### REPL
 
-    $ java -jar trickle-0.1.0-standalone.jar [args]
+Clone the repo, start the REPL!
 
-## Options
+	$ lein repl
 
-FIXME: listing of options this app accepts.
 
-## Examples
+### Automatic tests
 
-...
+(Midje)[https://github.com/marick/Midje] is a great testing utility we are using here. Just define some facts and start the autotest functionality:
 
-### Bugs
+	$ lein midje :autotest
 
-...
+and each time you save your code, Midje runs through all facts, which are affected, and executes them.
 
-### Any Other Sections
-### That You Think
-### Might be Useful
 
 ## License
 
-Copyright © 2014 FIXME
+Copyright © 2014 Alexander Schneider and Christian Meter
 
 Distributed under the Eclipse Public License either version 1.0 or (at
 your option) any later version.
