@@ -3,12 +3,17 @@
   (:require [clj-http.client :as client]))
 
 (def client-id "b45b1aa10f1ac2941910a7f0d10f8e28")
-
+(def api-url "http://api.soundcloud.com")
 
 (defn get-body
   "Get the body of a URL."
   [url]
   ((client/get url) :body))
+
+(defn get-xml
+  "Grabs the Track Info in XML form from the API."
+  [url]
+  (client/get (str api-url "/resolve?client_id=" client-id "&url=" url)))
 
 (defn download-file
   "Download a file from spec. URL into filename."
