@@ -14,7 +14,7 @@ Clone the repo, start the REPL!
 
 ### Automatic tests
 
-(Midje)[https://github.com/marick/Midje] is a great testing utility we are using here. Just define some facts and start the autotest functionality:
+[Midje](https://github.com/marick/Midje) is a great testing utility we are using here. Just define some facts and start the autotest functionality:
 
 	$ lein midje :autotest
 
