@@ -68,5 +68,6 @@
   [url]
   (let [track-xml (create-info-map (get-xml url))
         stream-url (track-xml :stream-url)
-        file-link (str stream-url "?client_id=" client-id)]
-    (download-file file-link "test.mp3")))
+        file-link (str stream-url "?client_id=" client-id)
+        info (extract-dl-info url)]
+    (download-file file-link (str (info :track-title) ".mp3"))))
