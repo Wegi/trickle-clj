@@ -4,6 +4,11 @@
 
 (def testbody (core/get-body "https://soundcloud.com/theclerkscologne/the-clerks-mazeltow"))
 (def testbody2 (core/get-body "https://soundcloud.com/hardwell/hardwell-live-at-sensation"))
+(def testxml (core/get-xml "https://soundcloud.com/revealed-recordings/dash-berlin-carita-la-nina-dragonfly-download"))
+
+(fact "Test the XML-Info generation"
+  (core/create-info-map testxml)
+  => {:stream-url "http://api.soundcloud.com/tracks/135737624/stream"})
 
 (fact "Test the song-Name exraction"
   (core/get-track-title testbody)

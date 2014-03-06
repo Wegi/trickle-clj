@@ -13,7 +13,15 @@
 (defn get-xml
   "Grabs the Track Info in XML form from the API."
   [url]
-  (client/get (str api-url "/resolve?client_id=" client-id "&url=" url)))
+  ((client/get (str api-url "/resolve?client_id=" client-id "&url=" url)) :body))
+
+(defn create-info-map
+  "Create an Info Hashmap from the XML String."
+  [xmlstr]
+  (let [stream-url (re-find #"<stream-url>(.*)</stream-url>" xmlstr)]
+    {:stream-url (second stream-url)}))
+
+(create-info-map (get-xml "https://soundcloud.com/revealed-recordings/dash-berlin-carita-la-nina-dragonfly-download"))
 
 (defn download-file
   "Download a file from spec. URL into filename."
@@ -36,7 +44,7 @@
   (second (first (re-seq #"<title>(.+) by" body))))
 
 (defn extract-dl-info
-  "Extracts data needed for the download of a stream."
+  "Extracts data needed for the download of a stream from the permalink-URL."
   [url]
   (let [pattern #".+soundcloud.com/([\w\d-]+)/([\w\d-]+)/?(.*)?$"
         matches (rest (re-find pattern url))]
@@ -57,10 +65,8 @@
      (str song-name ".wav"))))
 
 (defn download-stream
-  "Download a Stream from Soundcloud. Ask the API for the Stream URL."
-  ;;Get a Stream URL
-  ;;Make API Request for Stream URL without redirect
-  ;;Grab resource
-  ;;TODO
-  )
-
+  [url]
+  (let [track-xml (create-info-map (get-xml url))
+        stream-url (track-xml :stream-url)
+        file-link (str stream-url "?client_id=" client-id)]
+    (download-file file-link "test.mp3")))
