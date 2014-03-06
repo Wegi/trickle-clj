@@ -22,13 +22,6 @@
   (let [stream-url (re-find #"<stream-url>(.*)</stream-url>" xmlstr)]
     (second stream-url)))
 
-(defn download-file
-  "Download a file from spec. URL into filename."
-  [url filename]
-  (let [conn-image (client/get url {:as :byte-array})]
-    (with-open [w (clojure.java.io/output-stream filename)]
-      (.write w (:body conn-image)))))
-
 (defn get-track-id
   "Get the track id, given an html body from soundcloud."
   [body]
@@ -50,6 +43,16 @@
     {:uploader      (first matches)
      :track-title   (second matches)
      :private-token (last matches)}))
+
+
+;;;; Download section
+
+(defn download-file
+  "Download a file from spec. URL into filename."
+  [url filename]
+  (let [conn-image (client/get url {:as :byte-array})]
+    (with-open [w (clojure.java.io/output-stream filename)]
+      (.write w (:body conn-image)))))
 
 (defn download-free-track
   "Download a free track from soundcloud. Assuming that the client_id does not change at all." 
@@ -73,3 +76,5 @@
         file-link (str stream-url sec-symbol "client_id=" client-id)
         title (info :track-title)]
     (download-file file-link (str title ".mp3"))))
+
+

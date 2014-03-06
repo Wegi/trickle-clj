@@ -2,9 +2,12 @@
   (:use midje.sweet)
   (:require [trickle.core :as core]))
 
-(def testbody (core/get-body "https://soundcloud.com/theclerkscologne/the-clerks-mazeltow"))
-(def testbody2 (core/get-body "https://soundcloud.com/hardwell/hardwell-live-at-sensation"))
-(def testxml (core/get-xml "https://soundcloud.com/revealed-recordings/dash-berlin-carita-la-nina-dragonfly-download"))
+(def testbody
+  (core/get-body "https://soundcloud.com/theclerkscologne/the-clerks-mazeltow"))
+(def testbody2
+  (core/get-body "https://soundcloud.com/hardwell/hardwell-live-at-sensation"))
+(def testxml
+  (core/get-xml "https://soundcloud.com/revealed-recordings/dash-berlin-carita-la-nina-dragonfly-download"))
 
 (fact "Test the XML-Info generation"
   (core/get-stream-url testxml)
@@ -17,10 +20,8 @@
   => "FREE DOWNLOAD: Hardwell live at Sensation Innerspace - Denmark - 29-10-2011")
 
 (fact "Test the track-id exctraction"
-  (core/get-track-id testbody)
-  => "69992039"
-  (core/get-track-id testbody2)
-  => "26772050")
+  (core/get-track-id testbody) => "69992039"
+  (core/get-track-id testbody2) => "26772050")
 
 (fact "Test the extraction of needed Metadata"
   (core/extract-dl-info "https://soundcloud.com/revealed-recordings/dash-berlin-carita-la-nina-dragonfly-download")
