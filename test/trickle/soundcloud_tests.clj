@@ -8,6 +8,8 @@
   (core/get-body "https://soundcloud.com/hardwell/hardwell-live-at-sensation"))
 (def testxml
   (core/get-xml "https://soundcloud.com/revealed-recordings/dash-berlin-carita-la-nina-dragonfly-download"))
+(def testxml2
+  (core/get-xml "https://soundcloud.com/theclerkscologne/the-clerks-mazeltow"))
 
 (fact "Test the XML-Info generation"
   (core/get-stream-url testxml)
@@ -32,3 +34,9 @@
   => {:uploader "wegi-productions"
       :track-title "1337-mlgpro"
       :private-token "dh3289ez-a3"})
+
+(fact "Test downloadable?"
+  (core/downloadable? testxml)
+  => falsey
+  (core/downloadable? testxml2)
+  => truthy)

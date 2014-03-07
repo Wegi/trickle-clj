@@ -16,6 +16,12 @@
   ((client/get (str api-url "/resolve?client_id=" client-id
                     "&url=" url)) :body))
 
+(defn downloadable?
+  "Return a truthy or falsey value, regarding the track being a free download or not. Input
+should be the track XML."
+  [xml]
+  (re-find #"<downloadable type=\"boolean\">true</downloadable>" xml))
+
 (defn get-stream-url
   "Get the Stream-URL from the XML String."
   [xmlstr]
