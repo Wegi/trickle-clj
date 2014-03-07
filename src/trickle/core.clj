@@ -38,7 +38,7 @@
 (defn extract-dl-info
   "Extracts data needed for the download of a stream from the permalink-URL."
   [url]
-  (let [pattern #".+soundcloud.com/([\w\d-]+)/([\w\d-]+)/?(.*)?$" ;TODO raute
+  (let [pattern #".+soundcloud.com/([\w\d-]+)/([\w\d-]+)/?(.*)?[#.*]?$"
         matches (rest (re-find pattern url))]
     {:uploader      (first matches)
      :track-title   (second matches)
