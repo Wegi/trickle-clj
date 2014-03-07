@@ -83,4 +83,17 @@ should be the track XML."
         title (info :track-title)]
     (download-file file-link (str title ".mp3"))))
 
-
+(defn batch-download
+  "Download multiple Soundcloud-Songs at once.
+The Song-URLs have to be in a file. Each line represents one URL."
+  [file]
+  (let [urls (slurp file)
+        urlvec (clojure.string/split urls #"\n")
+        trimmed (map clojure.string/trim urlvec)
+        down-vec (map (fn [songurl]
+                        (let [xml (get-xml songurl)]
+                          (if (downloadable? xml)
+                            (download-free-track songurl)
+                            (download-stream songurl))))
+                      trimmed)]
+    (doall down-vec)))
