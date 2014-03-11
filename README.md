@@ -1,4 +1,4 @@
-# trickle - Reverse Engineering Services you know
+# trickle - Get the waterfal - drop by drop
 
 After having succeeded all exams this semester, we wanted to start a small OpenSource project with the smart programming language Clojure.
 
